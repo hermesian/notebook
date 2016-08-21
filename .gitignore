@@ -1,0 +1,6 @@
+*.dot
+*.model
+*.state
+/result/
+.ipynb_checkpoints/
+
