@@ -1,0 +1,18 @@
+{
+ "name": "caffe_train_task2",
+ "container": {
+   "type": "DOCKER",
+   "image": "caffe:cpu",
+   "volumes": [
+     {
+	"containerPath": "/workspace/",
+	"hostPath": "/home/YOUR_PATH/dl/notebook/tasks/caffe_task/workspace/",
+	"mode": "RW"
+     }
+   ]
+ },
+ "cpus": "2",
+ "mem": "512",
+ "uris": [],
+ "command": "cd /workspace; ./train.sh"
+}

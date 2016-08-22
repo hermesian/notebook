@@ -3,8 +3,8 @@ Notebook
 
 個人勉強用のリポジトリ。
 
-Build Docker container
-----------------------
+Build Notebook container
+------------------------
 
 ::
 

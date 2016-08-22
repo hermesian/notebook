@@ -2,8 +2,8 @@
 FROM ubuntu:14.04
 
 # Setup proxy
-#ENV http_proxy
-#ENV https_proxy
+# ENV http_proxy
+# ENV https_proxy
 #
 
 # Arguments
