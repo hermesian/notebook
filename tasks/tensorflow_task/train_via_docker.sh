@@ -7,4 +7,4 @@ DOCKER_OPTIONS="--rm -ti --volume=$(pwd)/workspace:/workspace --workdir=/workspa
 DOCKER_RUN="$DOCKER_CMD run $DOCKER_OPTIONS $IMAGE"
 
 # Train net
-$DOCKER_RUN python /workspace/convolutional.py
+$DOCKER_RUN python /workspace/train.py
