@@ -6,13 +6,14 @@
    "volumes": [
      {
 	"containerPath": "/workspace/",
-	"hostPath": "/home/YOUR_PATH/notebook/tasks/tensorflow_task/workspace/",
+	"hostPath": "/home/notebook/tasks/tensorflow_task/workspace/",
 	"mode": "RW"
      }
    ]
  },
  "cpus": "2",
- "mem": "512",
+ "mem": "4096",
  "uris": [],
- "command": "cd /workspace; python convolutional.py"
+ "command": "cd /workspace; python train.py"
 }
+

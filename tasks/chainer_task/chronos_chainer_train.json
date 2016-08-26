@@ -1,0 +1,19 @@
+{
+ "name": "chainer_train_task",
+ "container": {
+   "type": "DOCKER",
+   "image": "chainer:cpu",
+   "volumes": [
+     {
+	"containerPath": "/workspace/",
+	"hostPath": "/home/notebook/tasks/chainer_task/workspace/",
+	"mode": "RW"
+     }
+   ]
+ },
+ "cpus": "2",
+ "mem": "512",
+ "uris": [],
+ "command": "cd /workspace; python train.py"
+}
+
