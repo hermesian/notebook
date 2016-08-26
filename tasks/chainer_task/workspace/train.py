@@ -90,6 +90,8 @@ if args.resume:
     print('Load optimizer state from', args.resume)
     serializers.load_npz(args.resume, optimizer)
 
+
+print("Start learning loop")
 # Learning loop
 for epoch in six.moves.range(1, n_epoch + 1):
     print('epoch', epoch)
@@ -104,7 +106,8 @@ for epoch in six.moves.range(1, n_epoch + 1):
         t = chainer.Variable(xp.asarray(y_train[perm[i:i + batchsize]]))
 
         # Pass the loss function (Classifier defines it) and its arguments
-        # optimizer.update(model, x, t)
+        # ここが原因
+        optimizer.update(model, x, t)
 
 #        if epoch == 1 and i == 0:
 #            outfile = 'graph.%s.dot' % type
@@ -123,19 +126,19 @@ for epoch in six.moves.range(1, n_epoch + 1):
     #    sum_loss / N, sum_accuracy / N, throughput))
 
     # evaluation
-    sum_accuracy = 0
-    sum_loss = 0
-    for i in six.moves.range(0, N_test, batchsize):
-        x = chainer.Variable(xp.asarray(x_test[i:i + batchsize]),
-                             volatile='on')
-        t = chainer.Variable(xp.asarray(y_test[i:i + batchsize]),
-                             volatile='on')
-        loss = model(x, t)
-        sum_loss += float(loss.data) * len(t.data)
-        sum_accuracy += float(model.accuracy.data) * len(t.data)
+#    sum_accuracy = 0
+#    sum_loss = 0
+#    for i in six.moves.range(0, N_test, batchsize):
+#        x = chainer.Variable(xp.asarray(x_test[i:i + batchsize]),
+#                             volatile='on')
+#        t = chainer.Variable(xp.asarray(y_test[i:i + batchsize]),
+#                             volatile='on')
+#        loss = model(x, t)
+#        sum_loss += float(loss.data) * len(t.data)
+#        sum_accuracy += float(model.accuracy.data) * len(t.data)
 
-    print('test  mean loss={}, accuracy={}'.format(
-        sum_loss / N_test, sum_accuracy / N_test))
+#    print('test  mean loss={}, accuracy={}'.format(
+#        sum_loss / N_test, sum_accuracy / N_test))
 
 # Save the model and the optimizer
 outfile = 'model.%s.npz' % type
