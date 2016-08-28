@@ -1,5 +1,3 @@
-import time
-
 import tensorflow as tf
 
 import model
@@ -9,7 +7,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 flags = tf.app.flags
 FLAGS = flags.FLAGS
 flags.DEFINE_float('learning_rate', 1e-4, 'Initial learning rate.')
-flags.DEFINE_integer('max_steps', 2000, 'Number of steps to run trainer.')
+flags.DEFINE_integer('max_steps', 100, 'Number of steps to run trainer.')
 flags.DEFINE_integer('batch_size', 50, 'Batch size, '
                      'Must divide evenly into the dataset sizes.')
 
@@ -20,9 +18,10 @@ def run_training():
 
     x = tf.placeholder(tf.float32, shape=[None, 784])
     y_ = tf.placeholder(tf.float32, shape=[None, 10])
+    keep_prob = tf.placeholder("float")
 
     # Build a Graph that computes predictions from the inference model.
-    logits, keep_prob = model.inference(x)
+    logits = model.inference(x, keep_prob)
 
     # Add to the Graph the Ops for loss calculation.
     cross_entropy = model.loss(logits, y_)
@@ -40,25 +39,16 @@ def run_training():
     init = tf.initialize_all_variables()
     sess.run(init)
 
-    # start_time = time.time()
-
-    print("Start Training Loop!")
     for i in range(FLAGS.max_steps):
-        print("Loop before %d" % i)
-        batch = mnist.train.next_batch(FLAGS.batch_size)
-        print("XLoop after %d" % i)
 
+        batch = mnist.train.next_batch(FLAGS.batch_size)
         if i % 100 == 0:
             train_accuracy = accuracy.eval(feed_dict={
-                             x: batch[0], y_: batch[1], keep_prob: 1.0})
+                x: batch[0], y_: batch[1], keep_prob: 1.0})
             print("step %d, training accuracy %g" % (i, train_accuracy))
-        train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
-
-        # following line is the problem!
-        # print("test accuracy %g" % accuracy.eval(feed_dict={
-        #     x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
-    print("Finished!")
-    # print("Total duration time: %.3f sec" % time.time() - start_time)
+	train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+    # following line occur "Resource exhausted: OOM when allocating tensor with shape[10000,28,28,32]"
+    print("test accuracy %g"%accuracy.eval(feed_dict={x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 
 
 def main(_):

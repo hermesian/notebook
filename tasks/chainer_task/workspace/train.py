@@ -106,45 +106,44 @@ for epoch in six.moves.range(1, n_epoch + 1):
         t = chainer.Variable(xp.asarray(y_train[perm[i:i + batchsize]]))
 
         # Pass the loss function (Classifier defines it) and its arguments
-        # ここが原因
         optimizer.update(model, x, t)
 
-#        if epoch == 1 and i == 0:
-#            outfile = 'graph.%s.dot' % type
-#            with open(outfile, 'w') as o:
-#                g = computational_graph.build_computational_graph(
-#                    (model.loss, ))
-#                o.write(g.dump())
-#            print('graph generated in %s' % outfile)
+        if epoch == 1 and i == 0:
+            outfile = 'graph.%s.dot' % type
+            with open(outfile, 'w') as o:
+                g = computational_graph.build_computational_graph(
+                    (model.loss, ))
+                o.write(g.dump())
+            print('graph generated in %s' % outfile)
 
-#        sum_loss += float(model.loss.data) * len(t.data)
-#        sum_accuracy += float(model.accuracy.data) * len(t.data)
-#    end = time.time()
-    #elapsed_time = end - start
-    #throughput = N / elapsed_time
-    # print('train mean loss={}, accuracy={}, throughput={} images/sec'.format(
-    #    sum_loss / N, sum_accuracy / N, throughput))
+        sum_loss += float(model.loss.data) * len(t.data)
+        sum_accuracy += float(model.accuracy.data) * len(t.data)
+    end = time.time()
+    elapsed_time = end - start
+    throughput = N / elapsed_time
+    print('train mean loss={}, accuracy={}, throughput={} images/sec'.format(
+        sum_loss / N, sum_accuracy / N, throughput))
 
     # evaluation
-#    sum_accuracy = 0
-#    sum_loss = 0
-#    for i in six.moves.range(0, N_test, batchsize):
-#        x = chainer.Variable(xp.asarray(x_test[i:i + batchsize]),
-#                             volatile='on')
-#        t = chainer.Variable(xp.asarray(y_test[i:i + batchsize]),
-#                             volatile='on')
-#        loss = model(x, t)
-#        sum_loss += float(loss.data) * len(t.data)
-#        sum_accuracy += float(model.accuracy.data) * len(t.data)
+    sum_accuracy = 0
+    sum_loss = 0
+    for i in six.moves.range(0, N_test, batchsize):
+        x = chainer.Variable(xp.asarray(x_test[i:i + batchsize]),
+                             volatile='on')
+        t = chainer.Variable(xp.asarray(y_test[i:i + batchsize]),
+                             volatile='on')
+        loss = model(x, t)
+        sum_loss += float(loss.data) * len(t.data)
+        sum_accuracy += float(model.accuracy.data) * len(t.data)
 
-#    print('test  mean loss={}, accuracy={}'.format(
-#        sum_loss / N_test, sum_accuracy / N_test))
+    print('test  mean loss={}, accuracy={}'.format(
+        sum_loss / N_test, sum_accuracy / N_test))
 
 # Save the model and the optimizer
-outfile = 'model.%s.npz' % type
+outfile = 'model.npz'
 print('save the model in %s' % outfile)
 serializers.save_npz(outfile, model)
 
-outfile = 'state.%s.npz' % type
+outfile = 'state.npz'
 print('save the optimizer in %s' % outfile)
 serializers.save_npz(outfile, optimizer)
