@@ -2,4 +2,4 @@
 set -e
 
 # Train net
-curl -L -H 'Content-Type: application/json' -X POST -d@chronos_chainer_train.json http:///scheduler/iso8601
+curl -L -H 'Content-Type: application/json' -X POST -d@chronos_chainer_train.json http://dlhost1:4400/scheduler/iso8601

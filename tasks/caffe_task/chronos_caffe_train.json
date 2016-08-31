@@ -6,7 +6,7 @@
    "volumes": [
      {
 	"containerPath": "/workspace/",
-	"hostPath": "/home/YOUR_PATH/dl/notebook/tasks/caffe_task/workspace/",
+	"hostPath": "/home/notebook/tasks/caffe_task/workspace/",
 	"mode": "RW"
      }
    ]

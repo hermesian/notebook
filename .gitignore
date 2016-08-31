@@ -3,4 +3,4 @@
 *.state
 /result/
 .ipynb_checkpoints/
-
+*.pyc

@@ -52,31 +52,17 @@ mnist['data'] = mnist['data'].astype(np.float32)
 mnist['data'] /= 255
 mnist['target'] = mnist['target'].astype(np.int32)
 
-N = 2000
+N = 6000
 x_train, x_test = np.split(mnist['data'],   [N])
 y_train, y_test = np.split(mnist['target'], [N])
 N_test = y_test.size
 
-# Prepare model, defined in net.py
-# if args.net == 'simple':
-#    if args.net2 == 'cnn':
-#      model = L.Classifier(net.MnistCNN())
-#    elif args.net2 == 'sp':
-#      model = L.Classifier(net.MnistSP())
-#    else:
-#      model = L.Classifier(net.MnistMLP())
-    
+model = L.Classifier(net.MnistCNN())
+
 if args.gpu >= 0:
     cuda.get_device(args.gpu).use()
     model.to_gpu()
 xp = np if args.gpu < 0 else cuda.cupy
-#elif args.net == 'parallel':
-#    type = 'mlp'
-#    cuda.check_cuda_available()
-#    model = L.Classifier(net.MnistMLPParallel(784, n_units, 10))
-#    Xp = cuda.cupy
-
-model = L.Classifier(net.MnistCNN())
 
 # Setup optimizer
 optimizer = optimizers.Adam()
@@ -89,7 +75,6 @@ if args.initmodel:
 if args.resume:
     print('Load optimizer state from', args.resume)
     serializers.load_npz(args.resume, optimizer)
-
 
 print("Start learning loop")
 # Learning loop
@@ -109,7 +94,7 @@ for epoch in six.moves.range(1, n_epoch + 1):
         optimizer.update(model, x, t)
 
         if epoch == 1 and i == 0:
-            outfile = 'graph.%s.dot' % type
+            outfile = 'graph.dot'
             with open(outfile, 'w') as o:
                 g = computational_graph.build_computational_graph(
                     (model.loss, ))

@@ -1,12 +1,28 @@
+#!/usr/bin/env python
 from __future__ import print_function
 import argparse
 
 import chainer
+import chainer.functions as F
 import chainer.links as L
 from chainer import training
 from chainer.training import extensions
 
-import model
+
+# Network definition
+class MLP(chainer.Chain):
+
+    def __init__(self, n_in, n_units, n_out):
+        super(MLP, self).__init__(
+            l1=L.Linear(n_in, n_units),  # first layer
+            l2=L.Linear(n_units, n_units),  # second layer
+            l3=L.Linear(n_units, n_out),  # output layer
+        )
+
+    def __call__(self, x):
+        h1 = F.relu(self.l1(x))
+        h2 = F.relu(self.l2(h1))
+        return self.l3(h2)
 
 
 def main():
@@ -34,14 +50,14 @@ def main():
     # Set up a neural network to train
     # Classifier reports softmax cross entropy loss and accuracy at every
     # iteration, which will be used by the PrintReport extension below.
-    _model = L.Classifier(model.CNN())
+    model = L.Classifier(MLP(784, args.unit, 10))
     if args.gpu >= 0:
         chainer.cuda.get_device(args.gpu).use()  # Make a specified GPU current
-        _model.to_gpu()  # Copy the model to the GPU
+        model.to_gpu()  # Copy the model to the GPU
 
     # Setup an optimizer
     optimizer = chainer.optimizers.Adam()
-    optimizer.setup(_model)
+    optimizer.setup(model)
 
     # Load the MNIST dataset
     train, test = chainer.datasets.get_mnist()
@@ -55,7 +71,7 @@ def main():
     trainer = training.Trainer(updater, (args.epoch, 'epoch'), out=args.out)
 
     # Evaluate the model with the test dataset for each epoch
-    trainer.extend(extensions.Evaluator(test_iter, _model, device=args.gpu))
+    trainer.extend(extensions.Evaluator(test_iter, model, device=args.gpu))
 
     # Dump a computational graph from 'loss' variable at the first iteration
     # The "main" refers to the target link of the "main" optimizer.
@@ -73,8 +89,8 @@ def main():
     # Entries other than 'epoch' are reported by the Classifier link, called by
     # either the updater or the evaluator.
     trainer.extend(extensions.PrintReport(
-                   ['epoch', 'main/loss', 'validation/main/loss',
-                    'main/accuracy', 'validation/main/accuracy']))
+        ['epoch', 'main/loss', 'validation/main/loss',
+         'main/accuracy', 'validation/main/accuracy']))
 
     # Print a progress bar to stdout
     trainer.extend(extensions.ProgressBar())

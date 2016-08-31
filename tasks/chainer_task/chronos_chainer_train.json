@@ -1,4 +1,5 @@
 {
+ "async": true,
  "name": "chainer_train_task",
  "container": {
    "type": "DOCKER",
@@ -11,8 +12,8 @@
      }
    ]
  },
- "cpus": "2",
- "mem": "512",
+ "cpus": "4",
+ "mem": "2048",
  "uris": [],
  "command": "cd /workspace; python train.py"
 }

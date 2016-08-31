@@ -1,0 +1,38 @@
+{
+  "id": "/jupyter",
+  "cmd": null,
+  "cpus": 1,
+  "mem": 2048, 
+  "disk": 0,
+  "instances": 1,
+  "env": {
+    "PASSWORD": "password"
+  },
+  "container": {
+    "type": "DOCKER",
+    "volumes": [],
+    "docker": {
+      "image": "dev:cpu",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 8888,
+          "hostPort": 0,
+          "servicePort": 0,
+          "protocol": "tcp",
+          "labels": {}
+        }
+      ],
+      "privileged": false,
+      "parameters": [],
+      "forcePullImage": false
+    },
+    "volumes": [
+     {
+      "containerPath": "/opt/notes",
+      "hostPath": "/home/notebook/notes",
+      "mode": "RO"
+     }	    
+    ]
+  }
+}
