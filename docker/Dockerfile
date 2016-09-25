@@ -72,18 +72,15 @@ RUN pip --no-cache-dir install \
 # Install python library
 RUN pip --no-cache-dir install --upgrade \
         jupyter \
-	ipython \
         matplotlib \
         scikit-learn \
         Pillow
 
 # Generate configuration
 RUN jupyter notebook --generate-config && \
-    ipython profile create && \
     echo "c.NotebookApp.ip = '*'" >> /root/.jupyter/jupyter_notebook_config.py && \
     echo "c.NotebookApp.open_browser = False" >> /root/.jupyter/jupyter_notebook_config.py && \
-    echo "c.NotebookApp.notebook_dir = '/opt/notes'" >> /root/.jupyter/jupyter_notebook_config.py && \
-    echo "c.InteractiveShellApp.matplotlib = 'inline'" >>/root/.ipython/profile_default/ipython_config.py
+    echo "c.NotebookApp.notebook_dir = '/opt/notes'" >> /root/.jupyter/jupyter_notebook_config.py
 
 ADD start.sh /usr/local/bin/start.sh
 RUN chmod u+x /usr/local/bin/start.sh

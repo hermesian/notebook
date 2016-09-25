@@ -6,7 +6,7 @@ if [ "${PASSWORD-undef}" = "undef" ]; then
 fi
 
 if ! grep -qE '^c.NotebookApp.password =' $HOME/.jupyter/jupyter_notebook_config.py; then
-	HASH=$(python -c "from IPython.lib import passwd; print(passwd('${PASSWORD}'))")
+	HASH=$(python -c "from notebook.auth import passwd; print(passwd('${PASSWORD}'))")
 	echo "c.NotebookApp.password = u'${HASH}'" >>$HOME/.jupyter/jupyter_notebook_config.py
 fi
 unset PASSWORD
