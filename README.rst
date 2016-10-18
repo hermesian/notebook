@@ -8,7 +8,7 @@ Build Notebook container
 
 ::
 
-$ docker build -t dev:cpu -f Dockerfile .
+$ docker build -t dldev -f Dockerfile .
 
 
 Running
@@ -16,5 +16,5 @@ Running
 
 ::
 
-$ docker run -itd --name dev -v /home/you/dev/docker/notebook/notes:/opt/notes -p 8888:8888 -e PASSWORD=password dev:cpu
+$ NV_GPU=3 nvidia-docker run -itd --name dldev -v `pwd`/notebook/notes:/opt/notes -p 8888:8888 -p 6006:6006 -e PASSWORD=password dldev
 
