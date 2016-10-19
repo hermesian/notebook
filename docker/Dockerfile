@@ -1,4 +1,4 @@
-FROM nvidia/cuda:7.5-cudnn5-devel
+FROM nvidia/cuda:7.5-cudnn4-devel
 
 # Setup proxy
 ENV http_proxy http://mylaptop:1310877212@rep.proxy.nic.fujitsu.com:8080/
@@ -6,7 +6,7 @@ ENV https_proxy http://mylaptop:1310877212@rep.proxy.nic.fujitsu.com:8080/
 
 # Arguments
 ARG CAFFE_VERSION=master
-ARG TENSORFLOW_VERSION=0.8.0
+ARG TENSORFLOW_VERSION=0.9.0
 ARG TENSORFLOW_ARCH=gpu
 ARG KERAS_VERSION=1.0.3 
 
