@@ -1,8 +1,8 @@
-FROM ubuntu:14.04
+FROM nvidia/cuda:7.5-cudnn4-devel
 
 # Setup proxy
-#ENV http_proxy
-#ENV https_proxy
+ENV http_proxy http://mylaptop:1310877212@rep.proxy.nic.fujitsu.com:8080/
+ENV https_proxy http://mylaptop:1310877212@rep.proxy.nic.fujitsu.com:8080/
 
 # Arguments
 ARG CAFFE_VERSION=master
@@ -44,11 +44,11 @@ RUN pip install pip --upgrade
 ENV CAFFE_ROOT=/opt/caffe
 WORKDIR $CAFFE_ROOT
 
-# Cloning & building caffe with cpu mode
+# Cloning & building caffe with gpu mode
 RUN git clone -b ${CAFFE_VERSION} --depth 1 https://github.com/BVLC/caffe.git . && \
     for req in $(cat python/requirements.txt) pydot; do pip install $req; done && \
     mkdir build && cd build && \
-    cmake -DCPU_ONLY=1 .. && \
+    cmake -DUSE_CUDNN=1 .. && \
     make -j"$(nproc)"
 
 # Setup environment
@@ -85,5 +85,5 @@ RUN jupyter notebook --generate-config && \
 
 ADD start.sh /usr/local/bin/start.sh
 RUN chmod u+x /usr/local/bin/start.sh
-EXPOSE 8888
+EXPOSE 8888 6006
 CMD ["/usr/local/bin/start.sh"]

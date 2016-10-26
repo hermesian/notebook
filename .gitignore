@@ -4,3 +4,7 @@
 /result/
 .ipynb_checkpoints/
 *.pyc
+Bayesian Optimization.ipynb
+GPU.ipynb
+/mnist_data
+/MNIST_data
