@@ -81,7 +81,8 @@ RUN pip --no-cache-dir install --upgrade \
         jupyter \
         matplotlib \
         scikit-learn \
-        Pillow
+        Pillow \
+        scikit-optimize
 
 # Generate configuration
 RUN jupyter notebook --generate-config && \
