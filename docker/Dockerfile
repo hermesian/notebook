@@ -1,14 +1,13 @@
 FROM nvidia/cuda:7.5-cudnn4-devel
 
 # Setup proxy
-ENV http_proxy http://mylaptop:1310877212@rep.proxy.nic.fujitsu.com:8080/
-ENV https_proxy http://mylaptop:1310877212@rep.proxy.nic.fujitsu.com:8080/
+# ENV http_proxy
+# ENV https_proxy
 
 # Arguments
 ARG CAFFE_VERSION=master
-ARG TENSORFLOW_VERSION=0.9.0
+ARG TENSORFLOW_VERSION=0.11.0rc0
 ARG TENSORFLOW_ARCH=gpu
-ARG KERAS_VERSION=1.0.3 
 
 # Install dependencies
 RUN apt-get update && \
@@ -32,13 +31,18 @@ RUN apt-get update && \
     python-pip \
     python-numpy \
     python-scipy \
+    libssl-dev \
+    libffi-dev \  
     && \
     apt-get clean && \
     apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
 
 # Upgrade pip
-RUN pip install pip --upgrade
+RUN pip install pip --upgrade \
+                pyOpenSSL \
+                ndg-httpsclient \
+                pyasn1
 
 # Install Caffe
 ENV CAFFE_ROOT=/opt/caffe
@@ -67,7 +71,10 @@ COPY io.py $CAFFE_ROOT/python/caffe
 RUN pip --no-cache-dir install \
     chainer \
     https://storage.googleapis.com/tensorflow/linux/${TENSORFLOW_ARCH}/tensorflow-${TENSORFLOW_VERSION}-cp27-none-linux_x86_64.whl \
-    git+https://github.com/fchollet/keras.git@${KERAS_VERSION}
+    keras
+
+# This configuration avoid issue (https://github.com/tensorflow/tensorflow/issues/2626).
+ENV LD_LIBRARY_PATH /usr/local/cuda/extras/CUPTI/lib64:$LD_LIBRARY_PATH
 
 # Install python library
 RUN pip --no-cache-dir install --upgrade \

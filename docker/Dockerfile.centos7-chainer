@@ -1,4 +1,0 @@
-FROM nvidia/cuda:7.5-cudnn5-runtime-centos7
-
-# install yum packages
-RUN yum -y update

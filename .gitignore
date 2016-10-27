@@ -5,6 +5,6 @@
 .ipynb_checkpoints/
 *.pyc
 Bayesian Optimization.ipynb
-GPU.ipynb
+SC16Demo.ipynb
 /mnist_data
 /MNIST_data
